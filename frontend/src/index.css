@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    @apply bg-forest-900 text-bone-200 font-sans antialiased;
+    background-image:
+      radial-gradient(
+        1100px 600px at 12% -8%,
+        rgba(61, 220, 132, 0.1),
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 500px at 100% 0%,
+        rgba(47, 111, 79, 0.12),
+        transparent 55%
+      );
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: rgba(61, 220, 132, 0.28);
+    color: #eef5ef;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a1410;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1d4534;
+    border-radius: 999px;
+    border: 2px solid #0a1410;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2f6f4f;
+  }
+
+  :focus-visible {
+    outline: 2px solid #5ee79a;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  .container-px {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .prompt::before {
+    content: "$ ";
+    @apply text-mint-500;
+  }
+
+  .link-underline {
+    @apply relative inline-flex items-center gap-1.5 text-bone-200 transition-colors hover:text-mint-300;
+  }
+}
