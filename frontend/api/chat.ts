@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { config as loadEnv } from "dotenv";
 import { resolve } from "node:path";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { buildChunks, type Chunk } from "../src/lib/knowledge";
+import { buildChunks, type Chunk } from "./lib/knowledge";
 
 type Message = { role: "user" | "assistant"; content: string };
 
@@ -10,11 +10,19 @@ const CHAT_MODEL = "gemini-2.5-flash";
 const EMBED_MODEL = "gemini-embedding-001";
 const TOP_K = 5;
 
-// Vercel CLI skips gitignored env files (e.g. .env.local); load them for local dev.
-if (!process.env.GEMINI_API_KEY) {
-  loadEnv({ path: resolve(process.cwd(), ".env.local") });
-  loadEnv({ path: resolve(process.cwd(), ".env") });
+function loadLocalEnv() {
+  if (process.env.GEMINI_API_KEY) return;
+  for (const path of [
+    resolve(process.cwd(), ".env.local"),
+    resolve(process.cwd(), ".env"),
+    resolve(process.cwd(), "frontend/.env.local"),
+    resolve(process.cwd(), "frontend/.env"),
+  ]) {
+    loadEnv({ path });
+  }
 }
+
+loadLocalEnv();
 
 const SYSTEM_INSTRUCTION = `You are the friendly AI assistant on Mohamed Masood N's personal portfolio website. \
 People visit to learn about Mohamed — his background, skills, projects, and experience. \

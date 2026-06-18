@@ -4,15 +4,19 @@
   "private": true,
   "description": "Developer portfolio for Mohamed Masood N",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
-    "dev:vercel": "vercel dev",
+    "dev:vercel": "npx vercel dev --yes",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@vercel/node": "^5.8.17",
     "dotenv": "^17.4.2",
     "framer-motion": "^11.3.19",
     "lucide-react": "^0.427.0",
@@ -22,13 +26,11 @@
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@vercel/node": "^5.8.17",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.40",
     "tailwindcss": "^3.4.7",
     "typescript": "^5.5.4",
-    "vercel": "^54.14.2",
     "vite": "^5.3.5"
   }
 }

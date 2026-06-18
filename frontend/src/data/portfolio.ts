@@ -31,10 +31,9 @@ export const profile = {
 };
 
 export const about = {
-  // Crafted, first-person bio (not a resume dump)
   paragraphs: [
     "I'm a software developer at Zoho Corporation, where I work close to the metal of production systems — writing backend logic in Java, JavaScript, and SQL, and shipping features that real customers rely on every day.",
-    "Lately a lot of my time goes into vector-tile and Mapbox-based mapping systems, tightening up how maps render and behave, plus backend logic that powers prediction-driven features. I like problems where correctness, performance, and a good developer experience all have to coexist.",
+    "Lately a lot of my time goes into vector-tile and Mapbox-based mapping systems, tightening up how maps render and behave. I like problems where correctness, performance, and a good developer experience all have to coexist.",
     "I came up through an ECE degree, a pile of hackathon weekends, and side projects spanning the MERN stack to machine learning. I care about clean fundamentals, readable code, and shipping things that hold up under load.",
   ],
   facts: [
@@ -146,7 +145,7 @@ export const projects: Project[] = [
     ],
     stack: ["Hardware", "Renewable Energy", "Prototyping"],
     links: [
-      { label: "IEEE Xplore", href: "https://ieeexplore.ieee.org/" },
+      { label: "IEEE Xplore", href: "https://ieeexplore.ieee.org/document/11100012" },
     ],
   },
 ];
