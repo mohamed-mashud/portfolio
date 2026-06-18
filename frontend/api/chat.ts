@@ -1,12 +1,20 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { config as loadEnv } from "dotenv";
+import { resolve } from "node:path";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { buildChunks, type Chunk } from "../src/lib/knowledge";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-const CHAT_MODEL = "gemini-1.5-flash";
-const EMBED_MODEL = "text-embedding-004";
+const CHAT_MODEL = "gemini-2.5-flash";
+const EMBED_MODEL = "gemini-embedding-001";
 const TOP_K = 5;
+
+// Vercel CLI skips gitignored env files (e.g. .env.local); load them for local dev.
+if (!process.env.GEMINI_API_KEY) {
+  loadEnv({ path: resolve(process.cwd(), ".env.local") });
+  loadEnv({ path: resolve(process.cwd(), ".env") });
+}
 
 const SYSTEM_INSTRUCTION = `You are the friendly AI assistant on Mohamed Masood N's personal portfolio website. \
 People visit to learn about Mohamed — his background, skills, projects, and experience. \
@@ -42,6 +50,25 @@ function cosineSimilarity(a: number[], b: number[]): number {
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
+function fullContext(): string {
+  return buildChunks().map((c) => `- ${c.text}`).join("\n");
+}
+
+async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
+  let last: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      last = err;
+      if (i < attempts - 1) {
+        await new Promise((r) => setTimeout(r, 400 * (i + 1)));
+      }
+    }
+  }
+  throw last;
+}
+
 async function ensureEmbeddings(genAI: GoogleGenerativeAI): Promise<{
   chunks: Chunk[];
   embeddings: number[][];
@@ -52,11 +79,13 @@ async function ensureEmbeddings(genAI: GoogleGenerativeAI): Promise<{
 
   const chunks = buildChunks();
   const model = genAI.getGenerativeModel({ model: EMBED_MODEL });
-  const result = await model.batchEmbedContents({
-    requests: chunks.map((chunk) => ({
-      content: { role: "user", parts: [{ text: chunk.text }] },
-    })),
-  });
+  const result = await withRetry(() =>
+    model.batchEmbedContents({
+      requests: chunks.map((chunk) => ({
+        content: { role: "user", parts: [{ text: chunk.text }] },
+      })),
+    })
+  );
 
   const embeddings = result.embeddings.map((e) => e.values);
   cachedChunks = chunks;
@@ -68,21 +97,26 @@ async function retrieveContext(
   genAI: GoogleGenerativeAI,
   query: string
 ): Promise<string> {
-  const { chunks, embeddings } = await ensureEmbeddings(genAI);
+  try {
+    const { chunks, embeddings } = await ensureEmbeddings(genAI);
 
-  const model = genAI.getGenerativeModel({ model: EMBED_MODEL });
-  const queryResult = await model.embedContent(query);
-  const queryVector = queryResult.embedding.values;
+    const model = genAI.getGenerativeModel({ model: EMBED_MODEL });
+    const queryResult = await withRetry(() => model.embedContent(query));
+    const queryVector = queryResult.embedding.values;
 
-  const ranked = chunks
-    .map((chunk, i) => ({
-      chunk,
-      score: cosineSimilarity(queryVector, embeddings[i]),
-    }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, TOP_K);
+    const ranked = chunks
+      .map((chunk, i) => ({
+        chunk,
+        score: cosineSimilarity(queryVector, embeddings[i]),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, TOP_K);
 
-  return ranked.map((r) => `- ${r.chunk.text}`).join("\n");
+    return ranked.map((r) => `- ${r.chunk.text}`).join("\n");
+  } catch (err) {
+    console.warn("Embedding retrieval failed, using full portfolio context:", err);
+    return fullContext();
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -142,6 +176,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     res.end();
   } catch (err) {
+    console.error("Chat API error:", err);
+
     const message =
       err instanceof Error && err.message === "GEMINI_API_KEY is not configured"
         ? "The chat assistant isn't configured yet. Please reach out via the contact section."

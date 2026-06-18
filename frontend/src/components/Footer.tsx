@@ -3,7 +3,7 @@ import { profile } from "../data/portfolio";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-forest-600/60 bg-forest-950/40">
+    <footer className="border-t border-forest-600/60 bg-forest-950/40 pb-36 sm:pb-40">
       <div className="container-px flex flex-col items-center justify-between gap-5 py-8 sm:flex-row">
         <p className="font-mono text-xs text-bone-400">
           <span className="text-mint-500">©</span> {new Date().getFullYear()}{" "}
