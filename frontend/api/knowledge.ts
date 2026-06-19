@@ -8,7 +8,7 @@ import {
   achievements,
   workshops,
   publications,
-} from "../../src/data/portfolio";
+} from "../src/data/portfolio.js";
 
 export type Chunk = { id: string; text: string };
 

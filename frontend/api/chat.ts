@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { config as loadEnv } from "dotenv";
 import { resolve } from "node:path";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { buildChunks, type Chunk } from "./lib/knowledge";
+import { buildChunks, type Chunk } from "./knowledge.js";
 
 type Message = { role: "user" | "assistant"; content: string };
 

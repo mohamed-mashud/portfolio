@@ -1,1 +1,1 @@
-export { buildChunks, type Chunk } from "../../api/lib/knowledge";
+export { buildChunks, type Chunk } from "../../api/knowledge.js";
