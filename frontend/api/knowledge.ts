@@ -8,6 +8,7 @@ import {
   achievements,
   workshops,
   publications,
+  personal,
 } from "../src/data/portfolio.js";
 
 export type Chunk = { id: string; text: string };
@@ -90,6 +91,26 @@ export function buildChunks(): Chunk[] {
       id: `publication-${i}`,
       text: `Publication: "${pub.title}" (${pub.venue}). ${pub.summary}`,
     });
+  });
+
+  chunks.push({
+    id: "personal-hobbies",
+    text: `${profile.name}'s hobbies and interests: ${personal.hobbies.join(", ")}.`,
+  });
+
+  chunks.push({
+    id: "personal-favorites",
+    text: `${profile.name}'s favorites — Anime: ${personal.favorites.anime}. Movie: ${personal.favorites.movie}. Favorite technology: ${personal.favorites.tech}.`,
+  });
+
+  chunks.push({
+    id: "personal-goals",
+    text: `${profile.name}'s career goals: ${personal.goals}`,
+  });
+
+  chunks.push({
+    id: "personal-learning",
+    text: `${profile.name} is currently learning: ${personal.currentlyLearning.join(", ")}.`,
   });
 
   return chunks;

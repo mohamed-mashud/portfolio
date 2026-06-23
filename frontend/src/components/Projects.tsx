@@ -54,7 +54,7 @@ export default function Projects() {
                     key={bi}
                     className="flex gap-2.5 text-sm leading-relaxed text-bone-300"
                   >
-                    <span className="mt-1.5 select-none font-mono text-mint-500/80">
+                    <span className="shrink-0 select-none font-mono leading-relaxed text-mint-500/80">
                       ›
                     </span>
                     <span>{b}</span>
