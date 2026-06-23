@@ -34,7 +34,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="text-4xl font-extrabold leading-[1.05] tracking-tight text-bone-100 sm:text-6xl"
+            className="text-3xl font-extrabold leading-[1.05] tracking-tight text-bone-100 sm:text-5xl"
           >
             {profile.name}
           </motion.h1>
