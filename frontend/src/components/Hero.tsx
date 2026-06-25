@@ -1,4 +1,4 @@
-import { ArrowRight, Github, Linkedin, Mail, MapPin } from "lucide-react";
+import { ArrowRight, FileText, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 import TerminalWindow from "./ui/TerminalWindow";
 import Typewriter from "./ui/Typewriter";
@@ -83,6 +83,15 @@ export default function Hero() {
               className="inline-flex items-center gap-2 rounded-md border border-forest-500 bg-forest-800/50 px-5 py-3 text-sm font-semibold text-bone-100 transition hover:border-mint-500/60 hover:text-mint-300"
             >
               Get in touch
+            </a>
+            <a
+              href={profile.resume}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-md border border-forest-500 bg-forest-800/50 px-5 py-3 text-sm font-semibold text-bone-100 transition hover:border-mint-500/60 hover:text-mint-300"
+            >
+              <FileText className="h-4 w-4" />
+              Resume
             </a>
           </motion.div>
 
