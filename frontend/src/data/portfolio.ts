@@ -23,7 +23,7 @@ export const profile = {
   linkedin: "https://linkedin.com/in/mohamedmasoodn",
   linkedinHandle: "mohamedmasoodn",
   website: "https://mohamedmasood.in",
-  resume: "https://drive.google.com/file/d/1EHKA5Wie-CgiqrCGXt29DjzkIQyVJJuC/view?usp=sharing",
+  resume: "https://drive.google.com/file/d/1mTqFlRT0rsiuhhLLCQgigkHUlFDwmOmE/view?usp=sharing",
   available: true,
   tagline: [
     "I build the parts of products people never see but always feel —",
